@@ -17,15 +17,23 @@ function App() {
                 `${cardsUrl}/new/shuffle/?deck_count=1`
             );
             setDeckId(res.data.deck_id);
+            console.log(`Deck ID: ${res.data.deck_id}`);
         }
         fetchDeck();
-        console.log('Deck ID: ', deckId);
+        //console.log('Deck ID: ', deckId);
     }, []);
 
     return (
         <div className="App">
-            <CardList />
-            <DrawButton />
+            {deckId ? (
+                <>
+                    <h2>{deckId}</h2>
+                    <CardList />
+                    <DrawButton />
+                </>
+            ) : (
+                <i>Getting Deck ID</i>
+            )}
         </div>
     );
 }
