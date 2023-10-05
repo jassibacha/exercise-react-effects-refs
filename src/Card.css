@@ -1,0 +1,8 @@
+.Card {
+    width: 150px;
+    height: auto;
+    margin: 5px;
+}
+.Card-image {
+    max-width: 100%;
+}
