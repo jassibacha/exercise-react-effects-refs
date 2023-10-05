@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import Card from './Card';
-import DrawButton from './DrawButton';
+import CardButton from './CardButton';
 import './Deck.css';
 
 function Deck() {
@@ -9,6 +9,7 @@ function Deck() {
     const [cards, setCards] = useState([]);
     const [isDeckEmpty, setIsDeckEmpty] = useState(false);
     const [remaining, setRemaining] = useState(null);
+    const [isShuffling, setIsShuffling] = useState(false);
     const cardsUrl = 'https://deckofcardsapi.com/api/deck';
 
     // this is called *after* component first added to DOM
@@ -68,12 +69,69 @@ function Deck() {
         }
     }
 
+    async function shuffleDeck() {
+        setIsShuffling(true);
+        try {
+            await axios.get(`${cardsUrl}/${deckId}/shuffle/`);
+            setCards([]);
+            setRemaining(52);
+        } catch (err) {
+            alert(err);
+        } finally {
+            setIsShuffling(false);
+        }
+    }
+
+    /** Return draw button (disabled if shuffling) */
+    function renderDrawBtn() {
+        if (!deckId) return null;
+
+        return (
+            <button
+                className="DrawCard Button"
+                onClick={drawCard}
+                disabled={isShuffling}
+            >
+                Draw Card
+            </button>
+        );
+    }
+
+    /** Return shuffle button (disabled if already is) */
+    function renderShuffleBtn() {
+        if (!deckId) return null;
+        return (
+            <button
+                className="ShuffleDeck Button"
+                onClick={shuffleDeck}
+                disabled={isShuffling}
+            >
+                Shuffle Deck
+            </button>
+        );
+    }
+
     return (
         <div className="Deck">
             {deckId ? (
                 <>
                     <h2>Deck ID: {deckId}</h2>
-                    <div>{remaining} Cards Remaining</div>
+                    <div className="remaining">{remaining} Cards Remaining</div>
+                    <div className="buttons">
+                        <CardButton
+                            text="Draw Card"
+                            className="DrawCard Button"
+                            onClick={drawCard}
+                            disabled={isShuffling}
+                        />
+
+                        <CardButton
+                            text="Shuffle Deck"
+                            className="ShuffleDeck Button"
+                            onClick={shuffleDeck}
+                            disabled={isShuffling}
+                        />
+                    </div>
                     <div className="Deck-cards">
                         {cards.map((c) => (
                             <Card
@@ -89,7 +147,6 @@ function Deck() {
                             />
                         ))}
                     </div>
-                    <DrawButton drawCard={drawCard} />
                 </>
             ) : (
                 <>

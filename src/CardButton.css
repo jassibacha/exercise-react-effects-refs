@@ -1,0 +1,18 @@
+Button {
+    padding: 10px 15px;
+    background-color: rgb(71, 71, 71);
+    font: size 18px;
+    font-weight: bold;
+    color: #fff;
+    border: 0 none;
+    border-radius: 10px;
+    margin: 10px;
+    opacity: 1;
+    transition: all 0.25s;
+}
+Button:disabled {
+    background-color: rgb(107, 107, 107); /* Light gray background */
+    color: #aaa; /* Lighter text color */
+    cursor: not-allowed;
+    opacity: 0;
+}
