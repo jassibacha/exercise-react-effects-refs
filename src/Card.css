@@ -1,7 +1,16 @@
-.Card {
+/* .Card {
     width: 150px;
     height: auto;
     margin: 5px;
+} */
+
+.Card {
+    position: absolute;
+    top: 0;
+    left: 0;
+    transform: rotate(
+        calc(0deg + 180deg * var(--random))
+    ); /* This will rotate the card between -55 and 55 degrees */
 }
 .Card-image {
     max-width: 100%;

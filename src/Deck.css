@@ -1,6 +1,13 @@
-.Deck-cards {
+/* .Deck-cards {
     display: flex;
     flex-wrap: wrap;
     flex-direction: row;
     justify-content: center;
+} */
+
+.Deck-cards {
+    position: relative;
+    width: 150px; /* This should be the width of a card */
+    height: 220px; /* Adjust based on the height of a card */
+    margin: 40px auto; /* Center the pile of cards */
 }

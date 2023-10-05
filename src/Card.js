@@ -1,9 +1,26 @@
-import React, { useState } from 'react';
+import React from 'react';
 import './Card.css';
 
-function Card({ id, value, suit, image }) {
+function Card({
+    id,
+    value,
+    suit,
+    image,
+    rotation,
+    topOffset,
+    leftOffset,
+    zIndex,
+}) {
     return (
-        <div className={`Card ${id}`}>
+        <div
+            className={`Card ${id}`}
+            style={{
+                '--random': rotation,
+                top: `${topOffset}px`,
+                left: `${leftOffset}px`,
+                zIndex: zIndex,
+            }}
+        >
             <img
                 src={image}
                 className="Card-image"

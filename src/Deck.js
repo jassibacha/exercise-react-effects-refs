@@ -14,12 +14,16 @@ function Deck() {
     // this is called *after* component first added to DOM
     useEffect(function fetchDeckWhenMounted() {
         async function fetchDeck() {
-            const res = await axios.get(
-                `${cardsUrl}/new/shuffle/?deck_count=1`
-            );
-            setDeckId(res.data.deck_id);
-            console.log(`Deck ID: ${res.data.deck_id}`);
-            setRemaining(52);
+            try {
+                const res = await axios.get(
+                    `${cardsUrl}/new/shuffle/?deck_count=1`
+                );
+                setDeckId(res.data.deck_id);
+                console.log(`Deck ID: ${res.data.deck_id}`);
+                setRemaining(52);
+            } catch (err) {
+                alert(err);
+            }
         }
         fetchDeck();
         //console.log('Deck ID: ', deckId);
@@ -28,15 +32,16 @@ function Deck() {
     async function drawCard() {
         try {
             const res = await axios.get(`${cardsUrl}/${deckId}/draw/?count=1`);
-            if (res.data.remaining === 0) {
-                setIsDeckEmpty(true);
-                throw new Error('The deck is empty.');
-            }
 
             let card = res.data.cards[0];
             console.log(
                 `Drew ${card.value} OF ${card.suit}. ${res.data.remaining} cards left.`
             );
+
+            // Random rotation, top/left offsetting, and zIndex
+            const randomRotation = Math.random(); // Value between 0 and 1
+            const topOffset = Math.floor(Math.random() * 11) - 5; // Random value between -20 and 20
+            const leftOffset = Math.floor(Math.random() * 11) - 5; // Random value between -20 and 20
 
             setCards((cards) => [
                 ...cards,
@@ -45,11 +50,19 @@ function Deck() {
                     suit: card.suit,
                     value: card.value,
                     image: card.image,
-                    name: card.value + ' OF ' + card.suit,
+                    rotation: randomRotation,
+                    top: topOffset,
+                    left: leftOffset,
+                    zIndex: cards.length + 1, // This ensures that the zIndex increases with each drawn card
                 },
             ]);
 
             setRemaining(res.data.remaining);
+
+            if (res.data.remaining === 0) {
+                setIsDeckEmpty(true);
+                throw new Error('The deck is empty.');
+            }
         } catch (err) {
             alert(err);
         }
@@ -69,6 +82,10 @@ function Deck() {
                                 suit={c.suit}
                                 value={c.value}
                                 image={c.image}
+                                rotation={c.rotation}
+                                topOffset={c.top}
+                                leftOffset={c.left}
+                                zIndex={c.zIndex}
                             />
                         ))}
                     </div>
